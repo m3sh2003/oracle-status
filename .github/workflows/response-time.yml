@@ -1,4 +1,7 @@
 name: Response Time CI
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "0 23 * * *"

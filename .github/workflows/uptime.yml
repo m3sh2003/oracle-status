@@ -1,4 +1,7 @@
 name: Uptime CI
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "*/5 * * * *"
