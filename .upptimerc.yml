@@ -4,7 +4,7 @@ sites:
     expectedStatusCodes:
       - 200
   - name: CardioLife API
-    url: https://syntax-temporarily-moon-magnificent.trycloudflare.com/health
+    url: https://determined-donations-transit-province.trycloudflare.com/health
   - name: Telegram API
     url: https://api.telegram.org
   - name: GitHub
