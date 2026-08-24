@@ -1,3 +1,6 @@
+owner: m3sh2003
+repo: oracle-status
+
 sites:
   - name: Uptime Kuma
     url: http://145.241.107.81:3002
