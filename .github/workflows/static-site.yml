@@ -18,6 +18,8 @@ jobs:
         with:
           command: "site"
         env:
+          OWNER: m3sh2003
+          REPO: oracle-status
           GH_PAT: ${{ secrets.GH_PAT }}
           COMMIT_EMAIL: "ci@example.com"
           COMMIT_NAME: "Uptime_CI"
