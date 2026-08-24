@@ -1,0 +1,21 @@
+name: Response Time CI
+on:
+  schedule:
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+jobs:
+  release:
+    name: Generate response time charts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Response time
+        uses: upptime/uptime-monitor@v1.36.1
+        with:
+          command: "response-time"
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          COMMIT_EMAIL: "ci@example.com"
+          COMMIT_NAME: "Uptime_CI"
+          COMMIT_MSG: ":chart_with_upwards_trend: Update response time [skip ci]"
