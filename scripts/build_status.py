@@ -259,17 +259,16 @@ def main():
 
     cards = "".join(build_card(site, sample, samples) for site in sites)
 
-    html = HTML.format(
-        TITLE=cfg.get("title", "Status"),
-        INTRO=cfg.get("introMessage", ""),
-        CSS=CSS,
-        BANNER_CLASS=bclass,
-        BANNER_COLOR=bcolor,
-        BANNER_TEXT=btext,
-        UPDATED=now.strftime("%Y-%m-%d %H:%M UTC"),
-        INTERVAL=cfg.get("checkIntervalMinutes", 5),
-        CARDS=cards,
-    )
+    html = (HTML
+        .replace("{TITLE}", str(cfg.get("title", "Status")))
+        .replace("{INTRO}", str(cfg.get("introMessage", "")))
+        .replace("{CSS}", CSS)
+        .replace("{BANNER_CLASS}", str(bclass))
+        .replace("{BANNER_COLOR}", str(bcolor))
+        .replace("{BANNER_TEXT}", str(btext))
+        .replace("{UPDATED}", now.strftime("%Y-%m-%d %H:%M UTC"))
+        .replace("{INTERVAL}", str(cfg.get("checkIntervalMinutes", 5)))
+        .replace("{CARDS}", cards))
 
     with open(os.path.join(REPO_ROOT, "index.html"), "w") as f:
         f.write(html)
