@@ -1,0 +1,32 @@
+{
+  "title": "Oracle Mesh Status",
+  "introTitle": "Oracle Mesh",
+  "introMessage": "مراقبة خارجية مستقلة لخدمات Oracle AI Stack — تعمل من سيرفرات GitHub كل 5 دقائق",
+  "checkIntervalMinutes": 5,
+  "sites": [
+    {
+      "name": "Uptime Kuma",
+      "url": "http://145.241.107.81:3002",
+      "expectedStatusCodes": [200],
+      "description": "لوحة المراقبة الرئيسية"
+    },
+    {
+      "name": "CardioLife API",
+      "url": "https://determined-donations-transit-province.trycloudflare.com/health",
+      "expectedStatusCodes": [200],
+      "description": "واجهة CardioLife الصحية"
+    },
+    {
+      "name": "Telegram API",
+      "url": "https://api.telegram.org",
+      "expectedStatusCodes": [200],
+      "description": "واجهة بوت التليجرام"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com",
+      "expectedStatusCodes": [200],
+      "description": "خدمة الاستضافة"
+    }
+  ]
+}
