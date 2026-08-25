@@ -22,18 +22,10 @@ jobs:
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
-      - name: Commit history back to main
-        run: |
-          git config user.name "status-bot"
-          git config user.email "ci@example.com"
-          git add history.json
-          git commit -m "chore: update status history [skip ci]" || echo "no changes"
-          git push
-
       - name: Stage artifacts for Pages
         run: |
           mkdir -p dist
-          cp index.html data.json history.json dist/
+          cp index.html data.json dist/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
