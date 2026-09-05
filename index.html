@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oracle Mesh Status</title>
+<style>
+:root{--bg:#0f1419;--panel:#171d26;--panel2:#1d2530;--text:#e6edf3;--muted:#8b97a6;--accent:#0fb5ae;--up:#1faa59;--down:#e0413e;--pending:#e0a106;--border:#263041}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans Arabic',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.container{max-width:960px;margin:0 auto;padding:24px 16px 60px}
+header.top{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+header.top .logo{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#0fb5ae,#0a8f88);display:flex;align-items:center;justify-content:center;font-weight:800;color:#04110f;font-size:20px}
+header.top h1{font-size:22px;margin:0}
+.lead{color:var(--muted);margin:0 0 18px;font-size:14px}
+.banner{border-radius:12px;padding:16px 18px;margin:18px 0;display:flex;align-items:center;gap:12px;font-weight:600;font-size:16px}
+.banner.up{background:rgba(31,170,89,.12);border:1px solid rgba(31,170,89,.4);color:#7ee2a8}
+.banner.degraded{background:rgba(224,161,6,.12);border:1px solid rgba(224,161,6,.4);color:#f0c869}
+.banner.down{background:rgba(224,65,62,.12);border:1px solid rgba(224,65,62,.4);color:#f19390}
+.banner .b-dot{width:12px;height:12px;border-radius:50%}
+.server{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0 0 20px}
+.scard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.scard .s-label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.scard .s-val{font-weight:800;font-size:18px;margin-top:2px}
+.sbar{height:8px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:8px}
+.sbar-fill{height:100%;border-radius:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px}
+.card.down{border-color:rgba(224,65,62,.5)}
+.card.pending{border-color:rgba(224,161,6,.45)}
+.card-head{display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 auto}
+.card-title{font-weight:700;font-size:15px}
+.card-state{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--panel2);color:var(--muted)}
+.card.down .card-state{color:#f19390;background:rgba(224,65,62,.15)}
+.card.up .card-state{color:#7ee2a8;background:rgba(31,170,89,.15)}
+.card.pending .card-state{color:#f0c869;background:rgba(224,161,6,.15)}
+.card-desc{color:var(--muted);font-size:12.5px;margin:6px 0 12px}
+.metrics{display:flex;gap:10px;margin-bottom:10px}
+.metric{flex:1;background:var(--panel2);border-radius:8px;padding:8px 10px}
+.m-label{display:block;font-size:11px;color:var(--muted)}
+.m-val{display:block;font-weight:700;font-size:14px;margin-top:2px}
+.uptime-row{display:flex;gap:10px}
+.up-col{flex:1}
+.up-label{font-size:11px;color:var(--muted);display:block;margin-bottom:3px}
+.bar{height:7px;background:var(--panel2);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px}
+.pct{font-size:11px;color:var(--muted);margin-left:4px}
+.card-url{margin-top:10px;font-size:11px;word-break:break-all}
+.card-url a{color:var(--accent);text-decoration:none}
+.meta{color:var(--muted);font-size:12px;margin:4px 0 20px}
+footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+footer a{color:var(--accent);text-decoration:none}
+@media (prefers-color-scheme: light){:root{--bg:#f5f7fa;--panel:#fff;--panel2:#eef1f5;--text:#1a2230;--muted:#5b6675;--border:#e2e8f0}}
+</style>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister();});}).catch(function(){});}</script>
+</head>
+<body>
+<div class="container">
+  <header class="top">
+    <div class="logo">&#9672;</div>
+    <h1>Oracle Mesh Status</h1>
+  </header>
+  <p class="lead">مراقبة مستقلة لمنظومة Oracle AI Stack — تُحدّث من Uptime Kuma كل 5 دقائق.</p>
+  <div class="banner up">
+    <span class="b-dot" style="background:#1faa59"></span>جميع الأنظمة تعمل بكفاءة ✓ (18/18)
+  </div>
+  <p class="meta">آخر فحص: 2026-09-05 18:00 UTC &middot; يُحدّث تلقائياً كل 5 دقائق من سيرفرات GitHub المستقلة (البيانات من Uptime Kuma على مضيف Oracle)</p>
+<div class="server"><div class="scard">
+      <div class="s-label"><span>المعالج (CPU)</span><span>0.8%</span></div>
+      <div class="s-val">0.8%</div>
+      <div class="sbar"><div class="sbar-fill" style="width:0.8%;background:#1faa59"></div></div>
+    </div><div class="scard">
+      <div class="s-label"><span>الذاكرة (RAM)</span><span>20.5%</span></div>
+      <div class="s-val">20.5%</div>
+      <div class="sbar"><div class="sbar-fill" style="width:20.5%;background:#1faa59"></div></div>
+    </div><div class="scard">
+      <div class="s-label"><span>القرص (Disk)</span><span>79.4%</span></div>
+      <div class="s-val">79.4%</div>
+      <div class="sbar"><div class="sbar-fill" style="width:79.4%;background:#e0a106"></div></div>
+    </div></div>
+  <div class="grid">
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">CardioLife API</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:58:55.763</span></div>
+      <div class="card-url"><a href="http://172.18.0.1:8003/health" target="_blank" rel="noopener">http://172.18.0.1:8003/health</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Multimodal OCR</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">4 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:58:53.381</span></div>
+      <div class="card-url"><a href="http://multimodal-oracle:8077/health" target="_blank" rel="noopener">http://multimodal-oracle:8077/health</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Koko TTS</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:49.211</span></div>
+      <div class="card-url"><a href="http://koko-tts:8005/health" target="_blank" rel="noopener">http://koko-tts:8005/health</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Mem0 Service</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val"></span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">1 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:38.455</span></div>
+      <div class="card-url"><a href="mem0-service:8000" target="_blank" rel="noopener">mem0-service:8000</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">n8n Editor</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:58:54.550</span></div>
+      <div class="card-url"><a href="http://n8n:5678/home" target="_blank" rel="noopener">http://n8n:5678/home</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">FreeLLMAPI</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">4 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:54.304</span></div>
+      <div class="card-url"><a href="http://freellmapi:3001" target="_blank" rel="noopener">http://freellmapi:3001</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Ollama</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:54.312</span></div>
+      <div class="card-url"><a href="http://ollama:11434" target="_blank" rel="noopener">http://ollama:11434</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Telegram API</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">844 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:59.818</span></div>
+      <div class="card-url"><a href="https://api.telegram.org" target="_blank" rel="noopener">https://api.telegram.org</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">PostgreSQL DB</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val"></span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">0 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:38.503</span></div>
+      <div class="card-url"><a href="shared-agent-db:5432" target="_blank" rel="noopener">shared-agent-db:5432</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Redis</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val"></span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">1 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:57:20.190</span></div>
+      <div class="card-url"><a href="agent-redis:6379" target="_blank" rel="noopener">agent-redis:6379</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Unified Gateway</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:41.880</span></div>
+      <div class="card-url"><a href="http://unified-gateway:8011/health" target="_blank" rel="noopener">http://unified-gateway:8011/health</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Mesh Control</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">2 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 18:00:38.590</span></div>
+      <div class="card-url"><a href="http://mesh-control:8787/health" target="_blank" rel="noopener">http://mesh-control:8787/health</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">ECG Engine</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:42.601</span></div>
+      <div class="card-url"><a href="http://ecg-engine:8001/docs" target="_blank" rel="noopener">http://ecg-engine:8001/docs</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">ECG Digitizer</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">200 - OK</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">3 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 17:59:57.174</span></div>
+      <div class="card-url"><a href="http://ecg-digitizer:8002/docs" target="_blank" rel="noopener">http://ecg-digitizer:8002/docs</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">LangGraph MCP</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val"></span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">1 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 18:00:21.079</span></div>
+      <div class="card-url"><a href="langgraph-mcp:8001" target="_blank" rel="noopener">langgraph-mcp:8001</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">CrewAI MCP</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val"></span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">0 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 18:00:21.085</span></div>
+      <div class="card-url"><a href="crewai-mcp:8002" target="_blank" rel="noopener">crewai-mcp:8002</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Vision MCP</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val"></span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">0 ms</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 18:00:21.092</span></div>
+      <div class="card-url"><a href="vision-mcp:8000" target="_blank" rel="noopener">vision-mcp:8000</a></div>
+    </div>
+    <div class="card up">
+      <div class="card-head">
+        <span class="dot" style="background:#1faa59"></span>
+        <div class="card-title">Oracle Host (CPU/RAM/Disk)</div>
+        <div class="card-state">يعمل</div>
+      </div>
+      <div class="card-desc">None</div>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">الحالة</span><span class="m-val">CPU 31.8% | RAM 20.7% | Disk 79.4%</span></div>
+        <div class="metric"><span class="m-label">زمن الاستجابة</span><span class="m-val">—</span></div>
+      </div>
+      <div class="uptime-row">
+        <div class="up-col"><span class="up-label">٢٤س</span><div class="bar"><div class="bar-fill" style="width:100.0%;background:#1faa59"></div></div><span class="pct">100.0%</span></div>
+      </div>
+      <div class="card-url"><span style="color:var(--muted)">آخر فحص: 2026-09-05 18:00:35.716</span></div>
+      
+    </div></div>
+  <footer>
+    <p>مراقبة مستقلة لمنظومة Oracle AI Stack &mdash; البيانات تُحفظ على GitHub Pages (بدون الاعتماد على GitHub API وقت التشغيل).</p>
+    <p>مفتوح المصدر على <a href="https://github.com/m3sh2003/oracle-status">GitHub</a> &middot; مشغّل بواسطة <a href="http://145.241.107.81:3002" target="_blank" rel="noopener">Uptime Kuma</a>.</p>
+  </footer>
+</div>
+</body>
+</html>
